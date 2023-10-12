@@ -1,0 +1,331 @@
+@import "normalize";
+
+//dimensions
+$base-font-size: 16px;
+$max-content-width: 1024px;
+$breakpoint-large: 700px;
+$breakpoint-small: 570px;
+$breakpoint-tiny: 430px;
+
+$golden-ratio: 1.618;
+$page-vert-space: 2rem;
+$primary-horiz-gutter: 1.6rem;
+$primary-vert-gutter: $primary-horiz-gutter / $golden-ratio;
+$secondary-horiz-gutter: $primary-horiz-gutter / 2.4;
+$secondary-vert-gutter: $secondary-horiz-gutter / $golden-ratio;
+
+$header-height: 4rem;
+$header-topmargin: 8rem;
+$header-botmargin: $primary-vert-gutter;
+$footer-height: 2.4rem;
+
+$circle-width: 20rem;
+$radial-width: $primary-horiz-gutter;
+
+$primary-icon-width: 3rem;
+
+
+//type
+$font-family: Open Sans,system-ui,BlinkMacSystemFont,Roboto,sans-serif;
+$heading-1-size: 1.9rem;
+$heading-2-size: 1.6em;
+$heading-3-size: 1em;
+
+//colours
+$primary-color: #222;
+$primary-color-tint: #3c3c3c;
+$primary-bg-color: #f7f7f7;
+$secondary-color: #7c7c7c;
+$secondary-bg-color: #d4d4d4;
+$tertiary-color: #e1e1e1;
+$tertiary-bg-color: #474747;
+
+$link-color: $primary-color;
+$link-color-hover: $secondary-color;
+
+//timing
+$short-time: 400ms;
+
+//mixins
+@mixin flexbox-center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+      flex-direction: column;
+  -webkit-box-pack: center;
+    -ms-flex-pack: center;
+      justify-content: center;
+}
+
+// fluid type: vw eqiv units at a specific BP (assumes rem units for $item)
+@mixin vw-units-at-bp($prop, $item, $breakpoint){
+  #{$prop}: ( (($item / 1rem) * ($base-font-size / 1px))  / (($breakpoint / 1px) / 100) ) * 1vw;
+}
+
+//basics
+* {
+  -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+html {
+  font: $base-font-size $font-family;
+  line-height: 1.4;
+  color: $primary-color;
+  background-color: $primary-bg-color;
+  overflow-x: hidden;
+}
+body {
+  margin: 0 auto;
+  padding: $page-vert-space $primary-horiz-gutter 0;
+  @media screen and (max-width: $breakpoint-large) {
+    @include vw-units-at-bp(padding-top, $page-vert-space, $breakpoint-large);
+    @include vw-units-at-bp(padding-right, $primary-horiz-gutter, $breakpoint-large);
+    padding-bottom: 0;
+    @include vw-units-at-bp(padding-left, $primary-horiz-gutter, $breakpoint-large);
+  }
+  max-width: $max-content-width;
+  @media screen and (max-width: $max-content-width) {
+    overflow-x: hidden;
+  }
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  -webkit-transition: color $short-time;
+    transition: color $short-time;
+}
+a,
+a:link,
+a:visited {
+  color: $link-color;
+}
+a:hover {
+  color: $link-color-hover;
+}
+p {
+  margin-top: 0;
+  margin-bottom: .6em;
+}
+.heading1 {
+  font-size: $heading-1-size;
+  font-weight: 400;
+  text-shadow: 1px 1px $primary-bg-color;
+  letter-spacing: -1.4px;
+  margin: 0;
+}
+.heading2 {
+  font-size: $heading-2-size;
+  font-weight: normal;
+  color: $primary-color-tint;
+  margin: 0 0 $secondary-vert-gutter;
+}
+.heading3 {
+  font-size: $heading-3-size;
+  color: $primary-color-tint;
+  font-weight: 700;
+}
+//header
+.header-primary {
+  color: $secondary-color;
+  height: $header-height;
+  @include flexbox-center;
+  position: relative;
+  margin-bottom: $primary-vert-gutter;
+  margin-top: $header-topmargin;
+  @media screen and (max-width: $breakpoint-large) {
+    @include vw-units-at-bp(margin-top, $header-topmargin, $breakpoint-large);
+  }
+  @media print {
+    margin-top: 0;
+  }
+  &::before {
+    content: '';
+    background-color: $secondary-bg-color;
+    position: absolute;
+    left: -100%;
+    right: -100%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+    height: $header-height;
+    z-index: -1;
+    @media screen and (max-width: $breakpoint-large) {
+      @include vw-units-at-bp(height, $header-height, $breakpoint-large);
+    }
+  }
+  .heading1 {
+    @media screen and (max-width: $breakpoint-large) {
+      @include vw-units-at-bp(font-size, $heading-1-size, $breakpoint-large);
+    }
+  }
+}
+
+.intro,
+.brands,
+.feature,
+.contact {
+  margin-bottom: $primary-vert-gutter;
+}
+
+// feature blocks pair (would work with > 2)
+// split pair 50/50 without a wrapping element to clearfix
+@media screen and (min-width: $breakpoint-large) {
+  .feature {
+    width: 50%;
+  }
+  .feature:nth-child(odd) {
+    float: left;
+    padding-right: $primary-horiz-gutter / 2;
+  }
+  .feature:nth-child(even) {
+    float: right;
+    padding-left: $primary-horiz-gutter / 2;
+  }
+  .feature + *:not(.feature) {
+    clear: both;
+  }
+}
+.feature__list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 $secondary-vert-gutter;
+}
+.feature__item {
+  margin-bottom: $secondary-vert-gutter;
+}
+
+// brand list
+.brand-list {
+  list-style: none;
+  font-size: 0.825rem;
+  background-color: $tertiary-color;
+  margin: 0;
+  padding: $secondary-vert-gutter $secondary-horiz-gutter 0 0;
+}
+.brand-list__item {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 0 $secondary-vert-gutter $secondary-horiz-gutter;
+}
+
+// fluid type
+.main-content {
+  @media screen and (max-width: $breakpoint-large) {
+    @include vw-units-at-bp(font-size, 1rem, $breakpoint-large);
+  }
+  @media screen and (max-width: $breakpoint-small) {
+    font-size: 13px;
+  }
+}
+
+// mugshot in intro (image should be inside .intro semantically, but the margin-top negative offset is tied to .header-primary)
+.header-primary__mugshot {
+  font-size: 1rem;
+  float: right;
+  margin-top: -(($circle-width / 2) + ($header-height / 2) + $primary-vert-gutter);
+  @media screen and (max-width: $breakpoint-large) {
+    margin-top: calc( #{((( ($circle-width / 1rem) * ($base-font-size / 1px) )  / (($breakpoint-large / 1px) / 100) ) / -2 )  * 1vw} - #{ ($header-height / 2rem) + $primary-vert-gutter });
+  }
+  @media print {
+    margin-top: -$header-height;
+  }
+  width: $circle-width;
+  height: $circle-width;
+  @media screen and (max-width: $breakpoint-large) {
+    @include vw-units-at-bp(width, $circle-width, $breakpoint-large);
+    @include vw-units-at-bp(height, $circle-width, $breakpoint-large);
+  }
+  border-radius: 50%;
+  border: $radial-width solid $secondary-bg-color;
+  background-color: $secondary-bg-color;
+  shape-outside: circle() padding-box;
+  shape-margin: $radial-width;
+  @media screen and (max-width: $breakpoint-large) {
+    @include vw-units-at-bp(border-width, $radial-width, $breakpoint-large);
+    @include vw-units-at-bp(shape-margin, $radial-width, $breakpoint-large);
+  }
+  -webkit-filter: grayscale(.6);
+  filter: grayscale(.6);
+  transition: filter $short-time, -webkit-filter $short-time;
+  &:hover {
+    -webkit-filter: grayscale(0);
+    filter: grayscale(0);
+  }
+}
+
+// contact icons list
+.contact__icons {
+  font-size: 1rem;
+  position: absolute;
+  top: $page-vert-space + $radial-width;
+  @media screen and (max-width: $breakpoint-large) {
+    @include vw-units-at-bp(top, $page-vert-space + $radial-width, $breakpoint-large);
+  }
+  height: $primary-icon-width;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.contact__item {
+  display: inline-block;
+  vertical-align: top;
+  padding-right: $secondary-horiz-gutter;
+  width: $primary-icon-width;
+  height: $primary-icon-width;
+  @media screen and (max-width: $breakpoint-tiny) {
+    @include vw-units-at-bp(width, $primary-icon-width, $breakpoint-tiny);
+    @include vw-units-at-bp(height, $primary-icon-width, $breakpoint-tiny);
+    @include vw-units-at-bp(padding-right, $secondary-horiz-gutter, $breakpoint-tiny);
+  }
+}
+.contact__icon {
+  width: 100%;
+  height: 100%;
+  fill: $secondary-bg-color;
+  -webkit-transition: fill $short-time;
+  transition: fill $short-time;
+  &:hover {
+    fill: $tertiary-bg-color;
+  }
+}
+
+//footer
+.footer-primary {
+  color: $tertiary-color;
+  margin-top: $footer-height;
+  height: $footer-height;
+  line-height: $footer-height;
+  small {
+    line-height: 1em;
+  }
+  position: relative;
+  @include flexbox-center;
+  &::before {
+    content: '';
+    background-color: $tertiary-bg-color;
+    position: absolute;
+    left: -100%;
+    right: -100%;
+    top: 0;
+    height: 100%;
+    z-index: -1;
+  }
+}
+
+.footer-link,
+.footer-link:link,
+.footer-link:visited {
+  float: right;
+  text-decoration: none;
+  color: $tertiary-color;
+  &:hover {
+    color: $primary-bg-color;
+    text-decoration: underline;
+  }
+  @media print {
+    display: none;
+  }
+}
